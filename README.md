@@ -1,2 +1,9 @@
 # SAMC
 Simulated Annealing Monte Carlo
+
+To identify the energy minima of a coarse-grained ligand model, we developed this Simulated Annealing Monte Carlo (SAMC) algorithm. This computational method is typically applied to identify the global optimum of an objective function, even if there are many local optima.
+At the heart of our implementation of the SA method, we carried out Markov Chain Monte Carlo (MCMC) simulations of the ligand around the protein with the acceptance criterion of Metropolis et al., as detailed below. We did many MCMC simulations at temperatures given by the following schedule. 
+
+We started the simulations at a very high temperature (3000 K) and slowly cooled the system down to low enough temperatures at which an acceptance ratio of less than 1% was achieved. At each temperature level, we ran an MCMC simulation with the Metropolis criterion. The Monte Carlo trajectory ended at each temperature level after 10000 moves, or after 1000 accepted moves, whichever was reached sooner. With this protocol good convergence to minimum energies are achieved.
+
+At the beginning of each simulation, we put the central bead (of our five-bead model) at a random grid position within a volume layer around the protein. The thickness of the layer corresponds to the distance between the first and the second bead. After its random placement, the position of the central bead is kept fixed throughout the respective simulation. In each MCMC step, just one of the remaining four beads is randomly selected and moved by a maximum of 6 grid lengths along each of the three Cartesian coordinate axes. If in the new position the bead falls within the specified distance of any of the non-bonded beads, the move is rejected due to a repelling potential. Otherwise, the energy with the new ligand position is evaluated and compared to the old energy in the Metropolis criterion to accept or reject the move. Our code was tested with Julia version 1.5.2.  
